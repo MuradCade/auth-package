@@ -104,7 +104,7 @@ Validator::validateEmail($email);
 Validator::validatePassword($password);
 Validator::validateRequired($username);
 ```
-##🧾 Logging Usage
+## 🧾 Logging Usage
 - Use the Logger for custom logs:
 ```php
 
