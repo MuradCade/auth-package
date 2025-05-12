@@ -1,5 +1,5 @@
 # Simple Authentication Package
-AuthPackage is a simple authentication system built in PHP, offering basic functionality for user registration, login, session management, and CSRF token generation/validation. The package is lightweight, easy to integrate, and can be extended to fit your needs. In the future, features like email verification will be added.
+Simple Auth Package is a simple authentication system built in PHP, offering basic functionality for user registration, login, session management, and CSRF token generation/validation. The package is lightweight, easy to integrate, and can be extended to fit your needs. In the future, features like email verification will be added.
 
 ## Features
 
@@ -8,6 +8,8 @@ AuthPackage is a simple authentication system built in PHP, offering basic funct
 - **Session Management**
 - **CSRF Token Generation and Validation**
 - **User Logout**
+- **Logging (Error, Warning, Info)**
+
 
 ## Installation
 
@@ -117,6 +119,47 @@ if ($auth->isLoggedIn('userid')) {
 $auth->logout();
 echo "You have been logged out.";
 ```
+
+4. Logger Class
+The Logger class allows you to log messages to a log file for error tracking, debugging, and general information.
+
+Log a Message
+Use the Logger::log() method to log messages. You can log messages with different severity levels: INFO, WARNING, and ERROR.
+```php
+use AuthPackage\Logger;
+
+// Log an info message
+Logger::log('User logged in successfully', 'INFO');
+// Log a warning message
+Logger::log('Password attempt failed', 'WARNING');
+// Log an error message
+Logger::log('Database connection failed', 'ERROR');
+
+```
+### Log Format
+Each log entry will include:
+
+- Timestamp: Date and time of the log entry.
+- Log Level: Severity level (INFO, WARNING, ERROR).
+- Message: The log message.
+- Context: Optional additional context for debugging.
+
+1. Sample log entry:
+```php
+[2025-05-12 12:00:00] INFO: User logged in successfully
+[2025-05-12 12:01:00] WARNING: Password attempt failed
+[2025-05-12 12:02:00] ERROR: Database connection failed
+```
+2. Log to a Custom File
+-  You can customize the log file path when initializing the Logger:
+```php
+use AuthPackage\Logger;
+// Initialize Logger with a custom log file path
+Logger::setLogFilePath(__DIR__ . '/custom_logs/auth_log.txt');
+// Log an error message to the custom log file
+Logger::log('Error while connecting to database', 'ERROR');
+```
+
 ### Example Usage in a Simple Application
 ```php
 // Include the Composer autoloader
