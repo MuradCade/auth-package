@@ -1,5 +1,5 @@
 {
-    "name": "etech-online-academy/auth-package",
+    "name": "etech-online-academy/simple-package",
     "description": "\"A simple PHP authentication package using OOP",
     "type": "library",
     "license": "MIT",

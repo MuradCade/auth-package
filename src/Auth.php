@@ -73,7 +73,8 @@ class Auth
         if ($fetch[0]['email'] == $email && password_verify($password, $fetch[0]['password'])) {
             return true;
         }
-        return "Invalid credentials.";
+        return false;
+        // return "Invalid credentials.";
     }
 
     // Check if the user is logged in
