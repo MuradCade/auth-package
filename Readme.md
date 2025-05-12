@@ -32,8 +32,7 @@ Logger	Logs errors, warnings, and info to a file with auto-rotation when the log
 
 - 🧱 Database Schema Example
 ```sql
-Copy
-Edit
+
 CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   userid VARCHAR(50) UNIQUE,
@@ -47,8 +46,7 @@ CREATE TABLE users (
 ## 📄 Example Usage
 ➕ Register a User
 ```php
-Copy
-Edit
+
 require_once 'AuthPackage/Auth.php';
 
 use AuthPackage\Auth;
@@ -65,8 +63,7 @@ if ($result === true) {
 ```
 ## 🔐 Login a User
 ```php
-Copy
-Edit
+
 require_once 'AuthPackage/Auth.php';
 
 use AuthPackage\Auth;
@@ -84,8 +81,7 @@ if ($result === true) {
 ```
 ## 🔒 Check Session
 ```php
-Copy
-Edit
+
 session_start();
 if ($auth->isLoggedIn('user_id')) {
     echo "User is logged in.";
@@ -95,8 +91,7 @@ if ($auth->isLoggedIn('user_id')) {
 ```
 ## 🚪 Logout
 ```php
-Copy
-Edit
+
 $auth->logout();
 echo "Logged out.";
 ```
@@ -104,8 +99,7 @@ echo "Logged out.";
 - Available via Validator class:
 
 ```php
-Copy
-Edit
+
 Validator::validateEmail($email);
 Validator::validatePassword($password);
 Validator::validateRequired($username);
@@ -113,8 +107,7 @@ Validator::validateRequired($username);
 ##🧾 Logging Usage
 - Use the Logger for custom logs:
 ```php
-Copy
-Edit
+
 use AuthPackage\Logger;
 
 Logger::info("User registration attempt");
@@ -128,8 +121,7 @@ The package is designed for educational or prototype-level use. You may wish to 
 
 ## 📁 Project Structure
 ```pgsql
-Copy
-Edit
+
 AuthPackage/
 │
 ├── Auth.php
