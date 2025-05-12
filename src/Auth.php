@@ -4,6 +4,8 @@
 namespace AuthPackage;
 
 use AuthPackage\Database;
+use AuthPackage\Validator;
+use AuthPackage\Session;
 
 
 class Auth
@@ -71,6 +73,15 @@ class Auth
 
         $fetch = $result->fetch_all(MYSQLI_ASSOC);
         if ($fetch[0]['email'] == $email && password_verify($password, $fetch[0]['password'])) {
+
+            //Apply session here 
+            Session::setsession($sessionKeys = array(
+                'fullname' => $fetch[0]['fullname'],
+                'userid' => $fetch[0]['userid'],
+                'useremail' => $fetch[0]['email'],
+                'user_role' => $fetch[0]['role']
+            ));
+
             return true;
         }
         return false;

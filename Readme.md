@@ -1,141 +1,185 @@
-# 🔐 PHP OOP Authentication Package 
-A modular, object-oriented PHP authentication package with built-in validation, secure password hashing, custom user ID generation, logging, and MySQLi prepared statements. Ideal for quickly integrating user registration and login into procedural or OOP PHP projects.
+# Simple Authentication Package
+AuthPackage is a simple authentication system built in PHP, offering basic functionality for user registration, login, session management, and CSRF token generation/validation. The package is lightweight, easy to integrate, and can be extended to fit your needs. In the future, features like email verification will be added.
 
-## 📦 Package Components
-Class	Responsibility
-Database	Manages secure database connections (MySQLi).
-Auth	Handles user registration, login, logout, session checking, and unique ID generation.
-Validator	Provides input validation: email format, password strength, and required fields.
-Logger	Logs errors, warnings, and info to a file with auto-rotation when the log exceeds 1MB.
+## Features
 
-## 🚀 Features
-- ✅ Email & password validation
+- **User Registration**
+- **User Login**
+- **Session Management**
+- **CSRF Token Generation and Validation**
+- **User Logout**
 
-- 🔐 Secure password hashing (BCRYPT)
+## Installation
 
-- 🧪 Clean input validation utilities
+To install and use this package, follow these steps:
 
-- 🧾 Auto-rotating file-based error logging
+### Install the package using Composer
 
-- 🔁 Unique user ID generation with collision checking
+- Make sure Composer is installed, then run:
 
-- 🛡️ Fully uses prepared statements (MySQLi)
-
-- 🛠️ Installation
-
-
-# Clone the repo or copy the AuthPackage directory to your project.
-
-- Ensure your database has a users table (see schema below).
-
-- Update database credentials in Database.php if needed.
-
-- 🧱 Database Schema Example
-```sql
-
-CREATE TABLE users (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  userid VARCHAR(50) UNIQUE,
-  fullname VARCHAR(100),
-  email VARCHAR(100) UNIQUE,
-  password VARCHAR(255),
-  role VARCHAR(50),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+```bash
+composer require etech-online-academy/simple-package
 ```
-## 📄 Example Usage
-➕ Register a User
+- Include Composer Autoloader in your project
+After installing via Composer, include the autoloader in your main PHP file:
+
 ```php
+require_once __DIR__ . '/vendor/autoload.php';
+```
 
-require_once 'AuthPackage/Auth.php';
+## Classes and Usage
+1. Session Class
+The Session class is used to manage session data (like user details) in the application.
 
+#### Set Session Data Use this method to store user data in the session:
+
+
+```php
+use AuthPackage\Session;
+
+Session::setsession([
+    'fullname' => 'John Doe',
+    'userid' => 'user123',
+    'useremail' => 'john.doe@example.com',
+    'user_role' => 'student'
+]);
+```
+
+2. CSRFToken Class
+The CSRFToken class provides methods to generate and validate CSRF tokens for secure form submissions.
+
+Generate a CSRF Token
+Use this method to generate a CSRF token and include it in a form:
+```php
+use AuthPackage\CSRFToken;
+
+$csrfToken = CSRFToken::generateToken();
+echo "<input type='hidden' name='csrf_token' value='{$csrfToken}'>";
+```
+- Validate the CSRF Token
+Validate the CSRF token when processing a form submission:
+```php
+use AuthPackage\CSRFToken;
+
+if (!CSRFToken::validateToken($_POST['csrf_token'])) {
+    die('Invalid CSRF token.');
+}
+```
+- Remove CSRF Token
+Once the form is processed, remove the token from the session:
+```php
+use AuthPackage\CSRFToken;
+
+CSRFToken::removeToken();
+```
+3. Auth Class
+The Auth class handles user authentication (registration, login, session management).
+
+- Register a New User,
+Use this method to register a new user:
+```php
 use AuthPackage\Auth;
 
 $auth = new Auth();
+$registrationResult = $auth->register('John Doe', 'john.doe@example.com', 'SecurePass123!');
 
-$result = $auth->register('John Doe', 'john@example.com', 'Password@123');
-
-if ($result === true) {
+if ($registrationResult === true) {
     echo "Registration successful!";
 } else {
-    echo "Error: $result";
+    echo "Error: " . $registrationResult;
 }
 ```
-## 🔐 Login a User
+- Login a User,
+This method logs a user in by validating their email and password:
+
 ```php
-
-require_once 'AuthPackage/Auth.php';
-
 use AuthPackage\Auth;
 
 $auth = new Auth();
+$loginResult = $auth->login('john.doe@example.com', 'SecurePass123!');
 
-$result = $auth->login('john@example.com', 'Password@123');
-
-if ($result === true) {
+if ($loginResult === true) {
     echo "Login successful!";
-    $_SESSION['user_id'] = 'some_user_id'; // Set your own logic here
 } else {
-    echo "Error: $result";
+    echo "Error: Invalid credentials.";
 }
 ```
-## 🔒 Check Session
+- Check if the User is Logged In,You can check if a user is logged in by checking the session:
 ```php
-
-session_start();
-if ($auth->isLoggedIn('user_id')) {
-    echo "User is logged in.";
+if ($auth->isLoggedIn('userid')) {
+    echo "User is logged in!";
 } else {
     echo "User is not logged in.";
 }
 ```
-## 🚪 Logout
+- Logout the User,This method logs the user out by destroying the session:
 ```php
-
 $auth->logout();
-echo "Logged out.";
+echo "You have been logged out.";
 ```
-## 📋 Validation Utilities
-- Available via Validator class:
-
+### Example Usage in a Simple Application
 ```php
+// Include the Composer autoloader
+require_once __DIR__ . '/vendor/autoload.php';
 
-Validator::validateEmail($email);
-Validator::validatePassword($password);
-Validator::validateRequired($username);
+use AuthPackage\Auth;
+use AuthPackage\CSRFToken;
+use AuthPackage\Session;
+
+// Create a new instance of Auth
+$auth = new Auth();
+
+// Handle user registration
+if (isset($_POST['register'])) {
+    $csrfToken = $_POST['csrf_token'];
+
+    // Validate CSRF token
+    if (!CSRFToken::validateToken($csrfToken)) {
+        die('Invalid CSRF token.');
+    }
+
+    // Register the user
+    $registrationResult = $auth->register($_POST['username'], $_POST['email'], $_POST['password']);
+    
+    if ($registrationResult === true) {
+        echo "Registration successful!";
+    } else {
+        echo "Error: " . $registrationResult;
+    }
+}
+
+// Handle user login
+if (isset($_POST['login'])) {
+    $csrfToken = $_POST['csrf_token'];
+
+    // Validate CSRF token
+    if (!CSRFToken::validateToken($csrfToken)) {
+        die('Invalid CSRF token.');
+    }
+
+    // Login the user
+    $loginResult = $auth->login($_POST['email'], $_POST['password']);
+    
+    if ($loginResult === true) {
+        echo "Login successful!";
+    } else {
+        echo "Error: Invalid credentials.";
+    }
+}
+
+// Check if the user is logged in
+if ($auth->isLoggedIn('userid')) {
+    echo "Welcome, " . $_SESSION['fullname'];
+} else {
+    echo "Please log in.";
+}
 ```
-## 🧾 Logging Usage
-- Use the Logger for custom logs:
-```php
 
-use AuthPackage\Logger;
 
-Logger::info("User registration attempt");
-Logger::warning("Possible brute force detected", ['ip' => $_SERVER['REMOTE_ADDR']]);
-Logger::error("Database error occurred");
-```
-## 🧠 Notes
-The package is designed for educational or prototype-level use. You may wish to adapt it for production (e.g. stronger session security, rate-limiting, CSRF protection).
 
-### Log rotation is automatically handled when the log file exceeds 1MB.
+### License
+This package is licensed under the MIT License.
+### Contribution
+We welcome contributions! If you'd like to help improve this package, please fork the repository, make your changes, and submit a pull request. If you encounter any bugs or have feature requests, please open an issue in the repository.
 
-## 📁 Project Structure
-```pgsql
 
-AuthPackage/
-│
-├── Auth.php
-├── Database.php
-├── Validator.php
-├── Logger.php
-└── logs/
-    └── error_log.txt
-```
-## 🔮 Future Improvements (Optional Ideas)
-- Add user role-based access control.
-
-- Add email verification.
-
-- Add password reset via email token.
-
-- Convert to PSR-4 and make installable via Composer.
