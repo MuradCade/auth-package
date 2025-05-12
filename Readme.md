@@ -1,4 +1,4 @@
-# 🔐 PHP OOP Authentication Package
+# 🔐 PHP OOP Authentication Package 
 A modular, object-oriented PHP authentication package with built-in validation, secure password hashing, custom user ID generation, logging, and MySQLi prepared statements. Ideal for quickly integrating user registration and login into procedural or OOP PHP projects.
 
 ## 📦 Package Components
