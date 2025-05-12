@@ -120,7 +120,7 @@ $auth->logout();
 echo "You have been logged out.";
 ```
 
-4. Logger Class
+4. Logger Class,
 The Logger class allows you to log messages to a log file for error tracking, debugging, and general information.
 
 Log a Message

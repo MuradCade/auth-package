@@ -1,1 +1,0 @@
-[2025-05-12 16:53:05] [ERROR] Database Connection Failed | Access denied for user 'roots'@'localhost' (using password: NO) "C:\\Users\\hp\\Music\\playground\\auth-package\\src\\Database.php"
