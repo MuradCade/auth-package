@@ -8,9 +8,10 @@
             "AuthPackage\\": "src/"
         }
     },
-    "require": {
-        "php": "^7.3|^8.0"
-    },
+   "require": {
+    "php": "^7.3 || ^8.0",
+    "composer-runtime-api": "^2.0"
+  },
      "minimum-stability": "stable",
      "prefer-stable": true
 }
